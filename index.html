@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Hoorn — Sluiter Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #fdfcfa;
+    --bg-elevated: #f7f4ef;
+    --bg-card: #ffffff;
+    --text: #333333;
+    --text-dim: #686868;
+    --text-faint: #a1a1a1;
+    --accent: #d17374;
+    --accent-bright: #c15c5d;
+    --success: #6f9873;
+    --success-bg: #e6f0e7;
+    --danger: #b8524a;
+    --border: #e6e2d9;
+    --border-light: #d8d3c6;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{margin:0; padding:0; background:transparent; color:var(--text); font-family:'IBM Plex Mono', monospace;}
+  body{ min-height:100vh; }
+  .app{ max-width:560px; margin:0 auto; padding:20px 16px 60px; background:var(--bg); min-height:100vh; }
+  h1,h2,h3{ font-family:'Oswald', sans-serif; letter-spacing:0.02em; margin:0; }
+
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:34px; height:34px; border-radius:50%; border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; font-family:'Oswald',sans-serif; font-weight:700; color:var(--accent); font-size:15px; flex-shrink:0;}
+  .brand-text{ line-height:1.15; }
+  .brand-text .name{ font-family:'Oswald',sans-serif; font-weight:600; font-size:15px; text-transform:uppercase; letter-spacing:0.08em; }
+  .brand-text .sub{ font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.1em; }
+  .nav-toggle{ display:flex; gap:6px; }
+  .nav-btn{ background:none; border:1px solid var(--border-light); color:var(--text-dim); font-family:'IBM Plex Mono',monospace; font-size:11px; padding:6px 10px; border-radius:4px; cursor:pointer; text-transform:uppercase; letter-spacing:0.05em; }
+  .nav-btn.active{ background:var(--accent); border-color:var(--accent); color:#ffffff; font-weight:600; }
+
+  .eyebrow{ font-size:10.5px; color:var(--accent-bright); text-transform:uppercase; letter-spacing:0.14em; margin-bottom:6px; display:block; }
+  .screen-title{ font-size:22px; margin-bottom:4px; }
+  .screen-sub{ color:var(--text-dim); font-size:12.5px; margin-bottom:20px; line-height:1.5; }
+
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+  .field input[type=text], .field input[type=date], .field textarea, .field select{
+    width:100%; background:var(--bg-elevated); border:1px solid var(--border); color:var(--text);
+    padding:11px 12px; border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:14px;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{ outline:none; border-color:var(--accent); }
+  .field textarea{ resize:vertical; min-height:56px; }
+
+  .room-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px; }
+  .room-chip{ background:var(--bg-elevated); border:1px solid var(--border); color:var(--text); padding:14px 10px; border-radius:8px; cursor:pointer; font-family:'Oswald',sans-serif; font-size:13.5px; text-align:center; font-weight:500; }
+  .room-chip:active{ transform:scale(0.98); }
+  .room-chip.selected{ border-color:var(--accent); background:linear-gradient(180deg, #fbeeee, #f8e5e5); color:var(--accent-bright); font-weight:600; }
+
+  .primary-btn{ width:100%; background:var(--accent); color:#ffffff; border:none; padding:14px; border-radius:8px; font-family:'Oswald',sans-serif; font-size:14.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; cursor:pointer; }
+  .primary-btn:disabled{ background:var(--border-light); color:var(--text-faint); cursor:not-allowed; }
+  .ghost-btn{ width:100%; background:none; border:1px solid var(--border-light); color:var(--text-dim); padding:12px; border-radius:8px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; cursor:pointer; margin-top:8px; }
+
+  .progress-wrap{ margin-bottom:20px; }
+  .progress-label{ display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+  .progress-track{ height:6px; background:var(--bg-elevated); border-radius:3px; overflow:hidden; }
+  .progress-fill{ height:100%; background:linear-gradient(90deg, var(--accent), var(--accent-bright)); transition:width .25s; }
+
+  .section-card{ background:var(--bg-card); border:1px solid var(--border); border-radius:10px; margin-bottom:12px; overflow:hidden; }
+  .section-head{ display:flex; align-items:center; justify-content:space-between; padding:13px 14px; cursor:pointer; }
+  .section-head-title{ font-family:'Oswald',sans-serif; font-size:14.5px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .section-count{ font-size:11px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace; }
+  .chevron{ color:var(--text-faint); transition:transform .15s; font-size:12px; }
+  .chevron.open{ transform:rotate(180deg); }
+  .section-body{ padding:0 14px 14px; }
+
+  /* checkbox items */
+  .item-row{ display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-top:1px solid var(--border); }
+  .item-row:first-child{ border-top:none; }
+  .item-check{ width:22px; height:22px; border-radius:5px; border:1.5px solid var(--border-light); flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; cursor:pointer; background:var(--bg-elevated); }
+  .item-check.checked{ background:var(--success); border-color:var(--success); }
+  .item-check svg{ width:13px; height:13px; opacity:0; color:#ffffff; }
+  .item-check.checked svg{ opacity:1; }
+  .item-text{ font-size:13.5px; line-height:1.45; padding-top:1px; cursor:pointer; }
+  .item-col{ flex:1; min-width:0; }
+  .item-note{ font-size:11px; line-height:1.4; color:var(--accent-bright); margin-top:3px; padding-left:9px; border-left:2px solid var(--border-light); }
+  .item-text.checked{ color:var(--text-dim); text-decoration:line-through; text-decoration-color:var(--border-light); }
+
+  .note-field{ margin-top:8px; }
+  .note-field label{ font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.06em; }
+  .note-field textarea{ margin-top:4px; font-size:12.5px; padding:8px 10px; min-height:40px; }
+
+  .sub-row{ display:flex; align-items:center; gap:8px; margin:2px 0 8px 32px; }
+  .na-check{ width:16px; height:16px; border-radius:4px; border:1.5px solid var(--border-light); background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+  .na-check.checked{ background:var(--text-dim); border-color:var(--text-dim); }
+  .na-check svg{ width:10px; height:10px; opacity:0; color:#ffffff; }
+  .na-check.checked svg{ opacity:1; }
+  .na-label{ font-size:11.5px; color:var(--text-faint); cursor:pointer; }
+  .na-label.active{ color:var(--text-dim); }
+
+  .reason-field{ margin:2px 0 10px 32px; }
+  .reason-field textarea{ width:100%; background:var(--bg-elevated); border:1px solid var(--danger); color:var(--text); padding:8px 10px; border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:12px; min-height:36px; resize:vertical; }
+  .reason-field .reason-label{ font-size:10px; color:var(--danger); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px; display:block; }
+  .reason-field.filled textarea{ border-color:var(--success); background:var(--success-bg); }
+  .reason-field.filled .reason-label{ color:var(--success); }
+
+  /* material items */
+  .mat-row{ border-top:1px solid var(--border); }
+  .mat-row:first-child{ border-top:none; }
+  .mat-head{ display:flex; align-items:center; justify-content:space-between; padding:11px 0; cursor:pointer; gap:10px; }
+  .mat-name{ font-size:13.5px; font-weight:500; }
+  .mat-badge{ font-family:'IBM Plex Mono',monospace; font-size:12px; padding:3px 9px; border-radius:20px; background:var(--bg-elevated); color:var(--text-dim); border:1px solid var(--border-light); white-space:nowrap; flex-shrink:0; }
+  .mat-badge.full{ background:var(--success-bg); color:var(--success); border-color:var(--success); }
+  .mat-body{ padding:0 0 14px; }
+  .mat-instruction{ font-size:12.5px; color:var(--text-dim); line-height:1.55; margin-bottom:12px; padding:10px 12px; background:var(--bg-elevated); border-left:2px solid var(--accent); border-radius:0 6px 6px 0; }
+  .mat-storage{ margin-top:7px; padding-top:7px; border-top:1px solid var(--border); }
+  .mat-storage span{ text-transform:uppercase; letter-spacing:0.07em; font-size:10px; color:var(--text-faint); display:block; margin-bottom:2px; }
+  .mat-choices{ display:flex; gap:6px; padding:0 0 10px; }
+  .mat-choice{ flex:1; text-align:center; font-size:11.5px; line-height:1.3; padding:10px 6px; border-radius:6px; border:1px solid var(--border-light); background:var(--bg-elevated); color:var(--text-dim); cursor:pointer; }
+  .mat-choice:active{ transform:scale(0.98); }
+  .mat-choice.sel.done{ background:var(--success-bg); border-color:var(--success); color:var(--success); font-weight:600; }
+  .mat-choice.sel.partial{ background:#fbeeee; border-color:var(--accent); color:var(--accent-bright); font-weight:600; }
+  .mat-choice.sel.na{ background:#efece6; border-color:var(--text-dim); color:var(--text-dim); font-weight:600; }
+  .mat-reason{ margin-top:10px; }
+  .mat-reason label{ font-size:10px; color:var(--danger); text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:4px; }
+  .mat-reason textarea{ width:100%; background:var(--bg-elevated); border:1px solid var(--border-light); color:var(--text); padding:8px 10px; border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:12px; min-height:36px; resize:vertical; }
+  .mat-reason.active textarea{ border-color:var(--danger); }
+  .mat-badge.na{ background:var(--bg-elevated); color:var(--text-faint); border-color:var(--border-light); }
+  .mat-badge.partial{ background:#fbeeee; color:var(--accent-bright); border-color:var(--accent); }
+  .mat-name::after{ content:' \24D8'; color:var(--text-faint); font-size:11px; }
+
+  .sign-card{ background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:16px; margin-top:16px; }
+  .sign-row{ display:flex; align-items:center; gap:10px; }
+  .sign-check{ width:22px; height:22px; border-radius:5px; border:1.5px solid var(--border-light); flex-shrink:0; display:flex; align-items:center; justify-content:center; cursor:pointer; background:var(--bg-elevated); }
+  .sign-check.checked{ background:var(--accent); border-color:var(--accent); }
+  .sign-check svg{ width:13px; height:13px; opacity:0; color:#ffffff; }
+  .sign-check.checked svg{ opacity:1; }
+  .sign-text{ font-size:12.5px; color:var(--text-dim); cursor:pointer; }
+
+  .stamp-wrap{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:50px 20px; text-align:center; }
+  .stamp{ width:150px; height:150px; border-radius:50%; border:4px solid var(--success); display:flex; flex-direction:column; align-items:center; justify-content:center; transform:rotate(-8deg) scale(0.5); opacity:0; animation:stampIn .45s cubic-bezier(.2,1.4,.4,1) forwards; }
+  @keyframes stampIn{ to{ transform:rotate(-8deg) scale(1); opacity:1; } }
+  .stamp-check{ width:44px; height:44px; color:var(--success); margin-bottom:6px; }
+  .stamp-label{ font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:0.1em; color:var(--success); font-weight:600; }
+  .stamp-room{ font-family:'Oswald',sans-serif; font-size:11px; color:var(--success); opacity:0.8; }
+  .stamp-meta{ margin-top:22px; font-size:12.5px; color:var(--text-dim); line-height:1.6; }
+  .stamp-meta b{ color:var(--text); }
+
+  .entry-card{ background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:10px; }
+  .entry-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .entry-room{ font-family:'Oswald',sans-serif; font-size:14px; font-weight:600; }
+  .entry-badge{ font-size:10px; padding:3px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:0.05em; font-weight:600; white-space:nowrap; }
+  .entry-badge.complete{ background:var(--success-bg); color:var(--success); }
+  .entry-badge.incomplete{ background:#f8eaea; color:var(--danger); }
+  .entry-badge.exception{ background:#fbeeee; color:var(--accent-bright); }
+  .entry-meta{ font-size:11.5px; color:var(--text-dim); margin-top:4px; line-height:1.6; }
+  .entry-toggle{ font-size:11px; color:var(--accent-bright); margin-top:8px; cursor:pointer; text-transform:uppercase; letter-spacing:0.05em; }
+  .entry-detail{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border); font-size:12px; }
+  .entry-detail .missed{ color:var(--danger); margin:3px 0; }
+  .entry-detail .exception-item{ color:var(--accent-bright); margin:4px 0; line-height:1.4; }
+  .entry-detail .exception-item .reason{ color:var(--text-dim); font-style:italic; }
+  .entry-detail .note{ color:var(--text-dim); margin:3px 0; font-style:italic; }
+  .entry-delete{ font-size:10.5px; color:var(--text-faint); background:none; border:1px solid var(--border); padding:5px 9px; border-radius:5px; cursor:pointer; margin-top:10px; }
+
+  .settings-card{ background:var(--bg-card); border:1px solid var(--border); border-radius:10px; margin-top:24px; overflow:hidden; }
+  .settings-status{ font-size:11px; color:var(--success); margin-top:8px; }
+
+  .step-strip{ display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:14px; scrollbar-width:none; }
+  .step-strip::-webkit-scrollbar{ display:none; }
+  .step-chip{ flex:0 0 auto; font-size:11px; padding:6px 11px; border-radius:20px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-faint); cursor:pointer; white-space:nowrap; letter-spacing:0.02em; }
+  .step-chip.done{ border-color:var(--success); color:var(--success); background:var(--success-bg); }
+  .step-chip.current{ border-color:var(--accent); background:var(--accent); color:#ffffff; font-weight:600; }
+
+  .page-head{ margin-bottom:14px; }
+  .page-head .screen-title{ margin-bottom:0; }
+  .page-count{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-faint); font-weight:400; }
+
+  .page-nav{ display:flex; gap:8px; align-items:stretch; margin-top:16px; }
+  .page-nav .primary-btn{ width:auto; }
+  .nav-arrow{ flex:1; background:var(--bg-card); border:1px solid var(--border-light); color:var(--text-dim); border-radius:8px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; cursor:pointer; padding:14px 8px; }
+  .nav-arrow:disabled{ opacity:0.35; cursor:not-allowed; }
+
+  .warn-card{ background:#fdf5f5; border:1px solid var(--accent); border-radius:10px; padding:14px; margin-bottom:14px; }
+  .warn-title{ font-family:'Oswald',sans-serif; font-size:13.5px; font-weight:600; color:var(--accent-bright); margin-bottom:8px; }
+  .warn-item{ font-size:12.5px; color:var(--text-dim); padding:5px 0; cursor:pointer; border-top:1px solid #f2e3e3; }
+
+  .archive-note{ background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .archive-title{ font-family:'Oswald',sans-serif; font-size:14.5px; font-weight:600; margin-bottom:8px; }
+  .archive-note p{ font-size:12.5px; color:var(--text-dim); line-height:1.6; margin:0 0 12px; }
+  .archive-link{ display:inline-block; font-size:12px; color:var(--accent-bright); text-decoration:none; border:1px solid var(--accent); padding:8px 12px; border-radius:6px; }
+
+  .entry-badge.planned{ background:var(--bg-elevated); color:var(--text-dim); border:1px solid var(--border-light); }
+  .planned-block{ margin-top:10px; padding:9px 11px; background:var(--bg-elevated); border-left:2px solid var(--border-light); border-radius:0 6px 6px 0; }
+  .planned-title{ font-family:'Oswald',sans-serif; font-size:11.5px; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-dim); margin-bottom:5px; }
+  .planned-item{ font-size:12px; color:var(--text); margin:4px 0; line-height:1.4; }
+  .planned-item .reason{ color:var(--text-dim); font-style:italic; }
+
+  .stamp-flag{ margin-top:8px; font-size:12px; line-height:1.5; }
+  .stamp-flag.warn{ color:var(--danger); font-weight:600; }
+  .stamp-flag.ok{ color:var(--text-dim); }
+
+  .mail-hint{ margin-top:12px; padding-top:10px; border-top:1px solid var(--border); font-size:11.5px; line-height:1.5; color:var(--text-dim); }
+  .mail-hint.off{ color:var(--danger); }
+
+  .mail-status{ margin-top:22px; width:100%; max-width:340px; padding:12px 14px; border-radius:8px; font-size:12.5px; line-height:1.55; text-align:center; }
+  .mail-status.sending{ background:var(--bg-elevated); border:1px solid var(--border-light); color:var(--text-dim); }
+  .mail-status.ok{ background:var(--success-bg); border:1px solid var(--success); color:var(--success); font-weight:600; }
+  .mail-status.warn{ background:#fdf5f5; border:1px solid var(--accent); color:var(--accent-bright); }
+  .mail-status.fail{ background:#f8eaea; border:1px solid var(--danger); color:var(--danger); font-weight:600; }
+  .mail-status .mail-detail{ font-weight:400; font-size:11px; color:var(--text-dim); }
+
+  .empty-state{ text-align:center; padding:50px 20px; color:var(--text-faint); font-size:13px; }
+  .loading{ text-align:center; padding:60px 0; color:var(--text-faint); font-size:12.5px; }
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+const ROOMS = [
+  { id:'skybox-king', name:'Skybox King', customSections:() => KING_SECTIONS, customMaterial:() => KING_MATERIAL },
+  { id:'skybox-queen', name:'Skybox Queen', customSections:() => QUEEN_SECTIONS, customMaterial:() => QUEEN_MATERIAL },
+  { id:'mz-hangar-atrium', name:'Machinezaal, Hangar & Atrium', customSections:() => MZ_SECTIONS, customMaterial:() => MZ_MATERIAL },
+  { id:'brouwzaal', name:'Brouwzaal (+ keuken BZ)', customSections:() => BROUWZAAL_SECTIONS, customMaterial:() => BROUWZAAL_MATERIAL },
+  { id:'multifunk', name:'Multifunk', customSections:() => MULTIFUNK_SECTIONS, customMaterial:() => MULTIFUNK_MATERIAL },
+  { id:'manhattan-bar', name:'Manhattan Bar', customSections:() => BAR_SECTIONS },
+  { id:'manhattan-studio1', name:'Manhattan Studio 1', customSections:() => STUDIO1_SECTIONS },
+];
+
+const SLUITERS = [
+  'Alfons','Benjamin','Dirk','Gert','Jan','Joas','Kenny','Lotte','Ludovic','Mehdi','Robbe','Savanna','Simon'
+];
+
+// ─────────────────────────────────────────────────────────────
+// MAILING — plak hier je Formspree-URL tussen de aanhalingstekens.
+// Voorbeeld: 'https://formspree.io/f/xabcdefg'
+// Zo werkt de mail overal: in Claude, lokaal geopend én extern gehost.
+// Een URL die je via Overzicht → E-mail instellingen opslaat, krijgt voorrang.
+const DEFAULT_EMAIL_ENDPOINT = 'https://formspree.io/f/meeydjdj';
+// ─────────────────────────────────────────────────────────────
+
+// Shared material catalogue — used regardless of which room is being closed.
+// Edit total/instruction here to match the real inventory and storage spots.
+const MAT_CHOICES = [
+  { id:'done',    label:'Alles opgeruimd' },
+  { id:'partial', label:'Deels blijven staan' },
+  { id:'na',      label:'Niet gebruikt' },
+];
+
+// Gedeelde materiaallijst — telt per event, niet per zaal.
+// Geen aantallen: de sluiter kiest per item bewust een status.
+// Materiaallijst per zaal — elke zaal apart aan te passen.
+// ── Materiaal Skybox King & Queen ── één gedeelde lijst voor beide skyboxen.
+const SKYBOX_MATERIAL = [
+  { id:'barkruk-zwart', name:'Barkruk zwart',
+    instruction:'Kruk proper. Per 15 op een kar (3 stapels van 5).',
+    storage:'Kelder, achter de grijze panelen.' },
+  { id:'ronde-statafel', name:'Ronde statafels',
+    instruction:'Tafels afkuisen (psht psht) en langs de kant van de zaal zetten of naar +2.' },
+  { id:'houten-stapelstoel', name:'Houten stapelstoelen',
+    instruction:'Stoel proper, stapelen per (max.) 9 op kar.',
+    storage:'In principe in de kelder, tenzij nodig de dag erna.' },
+  { id:'ronde-tafels', name:'Ronde tafels',
+    instruction:'Tafels dichtklappen.',
+    storage:'In de kelder op de karren, tenzij nodig de dag erna.' },
+  { id:'techniek', name:'Microfoon & andere technische stuff',
+    instruction:'Micro in houten bakje samen met al de andere kaskes enz.',
+    storage:'Of in de kast, of klaarzetten voor morgen.' },
+];
+
+const KING_MATERIAL = SKYBOX_MATERIAL;
+const QUEEN_MATERIAL = SKYBOX_MATERIAL;
+const MZ_MATERIAL = [
+  { id:'barkruk-zwart', name:'Barkruk zwart',
+    instruction:'Kruk proper. Per 15 op een kar (3 stapels van 5).',
+    storage:'Kelder, achter de grijze panelen.' },
+  { id:'statafel', name:'Statafel',
+    instruction:'Tafels afkuisen (psht psht) en stapelen per 10 op pallet.',
+    storage:'Op pallet in de Hangar.' },
+  { id:'witte-stapelstoel', name:'Witte stapelstoelen',
+    instruction:'Stoel proper, stapelen per (max.) 13 op kar.',
+    storage:'In principe in de kelder, tenzij nodig de dag erna.' },
+  { id:'ronde-tafels', name:'Ronde tafels',
+    instruction:'Tafels dichtklappen.',
+    storage:'In de kelder op de karren, tenzij nodig de dag erna.' },
+  { id:'techniek', name:'Microfoon & andere technische stuff',
+    instruction:'Micro in de lader, afstandsbedieningen e.d. aan de PC (in het bakje).',
+    storage:'Naast de PC in de Machinezaal.' },
+];
+
+const BROUWZAAL_MATERIAL = [
+  { id:'barkruk-zwart', name:'Barkruk zwart',
+    instruction:'Kruk proper. Per 15 op een kar (3 stapels van 5).',
+    storage:'Kelder, achter de grijze panelen.' },
+  { id:'statafel', name:'Statafel',
+    instruction:'Tafels afkuisen (psht psht) en wegzetten tegen het raam opzij.' },
+  { id:'witte-stapelstoel', name:'Witte stapelstoelen',
+    instruction:'Stoel proper, stapelen per (max.) 13 op kar.',
+    storage:'In principe in de kelder, tenzij nodig de dag erna.' },
+  { id:'ronde-tafels', name:'Ronde tafels',
+    instruction:'Tafels dichtklappen.',
+    storage:'In de kelder op de karren, tenzij nodig de dag erna.' },
+  { id:'techniek', name:'Microfoon & andere technische stuff',
+    instruction:'Micro in lader.' },
+];
+
+const MULTIFUNK_MATERIAL = [
+  { id:'barkruk-zwart', name:'Barkruk zwart',
+    instruction:'Kruk proper. Per 15 op een kar (3 stapels van 5).',
+    storage:'Kelder, achter de grijze panelen.' },
+  { id:'statafel', name:'Statafel',
+    instruction:'Tafels afkuisen (psht psht) en stapelen per 10 op pallet.',
+    storage:'Op pallet in de Hangar.' },
+  { id:'witte-stapelstoel', name:'Witte stapelstoelen',
+    instruction:'Stoel proper, stapelen per (max.) 13 op kar.',
+    storage:'In principe in de kelder, tenzij nodig de dag erna.' },
+  { id:'houten-stapelstoel', name:'Houten stapelstoelen',
+    instruction:'Stoel proper, stapelen per (max.) 9 op kar.',
+    storage:'In principe in de kelder, tenzij nodig de dag erna.' },
+  { id:'ronde-tafels', name:'Ronde tafels',
+    instruction:'Tafels dichtklappen.',
+    storage:'In de kelder op de karren, tenzij nodig de dag erna.' },
+  { id:'techniek', name:'Technische stuff',
+    storage:'In het kleine kastje of klaarleggen voor het volgende event.' },
+];
+
+
+// ── Gedeelde secties ── gelden voor Skybox King, Skybox Queen,
+// Machinezaal/Hangar/Atrium, Brouwzaal en Multifunk.
+// Pas je hier iets aan, dan verandert het meteen in al die zalen.
+const SHARED_SECTIONS = [
+  { id:'algemeen-afval', title:'Algemeen afval & afwas', type:'check', items:[
+    { text:'Vloer geveegd en proper',
+      note:'Zodat de kuisploeg vlot kan kuisen.' },
+    'Vuilnisbakken geleegd, nieuwe zakken geplaatst',
+    { text:'Afval gesorteerd (PMD / rest / glas / papier) en naar de juiste container gebracht',
+      note:'Let op het uur als je glas weggooit.' },
+    'Glazen en vaat afgewassen en opgeruimd',
+    { text:'Vuile tafellakens naar de kelder in de daarvoor voorziene bakken',
+      notes:['Vermijd tandenstokers enz.!', 'Natte doeken openhangen!'] },
+    { text:'Koffiemachines uitkuisen & aanvullen',
+      note:'Pads aanvullen, lekbak leeg, gebruikte pads in vuilbak!' },
+  ]},
+  { id:'controle-afsluit', title:'Controle afsluit', type:'check', items:[
+    { text:'Losse spullen / verloren voorwerpen naar dispatch in de rode bak',
+      note:'Sticker opplakken.' },
+    'Alle lichten uit',
+    'Airco (verwarming) uitschakelen',
+    'Ramen en deuren gesloten en op slot',
+    'Sleutels teruggebracht naar sleutelkastje',
+    'Zaal visueel gecontroleerd op schade',
+  ]},
+];
+
+// Zalen met enkel de gedeelde secties.
+const KING_SECTIONS = SHARED_SECTIONS;
+const QUEEN_SECTIONS = SHARED_SECTIONS;
+const MZ_SECTIONS = SHARED_SECTIONS;
+const MULTIFUNK_SECTIONS = SHARED_SECTIONS;
+
+// ── Brouwzaal ── gedeelde secties + een extra keukentaak en de tap.
+// sharedSection() pakt een gedeelde sectie en laat je er items bij zetten
+// zonder de andere zalen te beïnvloeden.
+function sharedSection(id, extraItems){
+  const base = SHARED_SECTIONS.find(s => s.id === id);
+  return { ...base, items:[...base.items, ...(extraItems || [])] };
+}
+
+const BROUWZAAL_SECTIONS = [
+  sharedSection('algemeen-afval', [
+    { text:'Keuken +2 opruimen',
+      note:'Afwas gedaan, planken weg, werktafel proper, alles netjes, ...!' },
+  ]),
+  sharedSection('controle-afsluit'),
+  { id:'tap', title:'Tapinstallatie', type:'check', items:[
+    'Tapkraan gespoeld met water',
+    { text:'Biervat afgesloten',
+      notes:['Vat nodig dag erna? Laat staan naast de tap.',
+             'Niet direct nodig? Vat in koeling van King plaatsen.'] },
+    'Acide dichtdraaien aan de fles!',
+  ]},
+];
+// ── Manhattan Studio 1 ── eigen checklist, vrij aan te passen
+const STUDIO1_SECTIONS = [
+  { id:'s1-materiaal', title:'Materiaal & voorraad', type:'check', items:[
+    'Gehuurd materiaal opgeruimd en terug in de juiste bakken (foto\u2019s van de juiste bakken worden de dag zelf gedeeld met de eindverantwoordelijke)',
+    'Leeggoed gesorteerd en op pallet klaargelegd aan de sas ingang',
+    'Volle bakken drank terug in de drankenvoorraad gezet',
+  ]},
+  { id:'s1-frigo-tap', title:'Frigo\u2019s & tap', type:'check', items:[
+    'Frigo\u2019s leeggemaakt',
+    'Frigo\u2019s uitgeschakeld',
+    'Tapinstallaties uitgespoeld',
+    'Tapinstallaties achter het gordijn gezet, naast de trappen bureau Jeroen',
+  ]},
+  { id:'s1-zaal', title:'Zaal opruimen', type:'check', items:[
+    'Zaal geborsteld',
+    'Borstels naast de tapinstallaties of frigo\u2019s gezet',
+    'Rekken buiten terug juist gezet',
+  ]},
+  { id:'s1-afsluiten', title:'Afsluiten', type:'check', items:[
+    'Lichtmagazijn uit en dicht',
+    'Airco uitgezet',
+    'Brandalarm gecheckt',
+    'Sfeerlicht uitgezet indien gebruikt (buiten + binnen)',
+    'Algemene zaallichten uitgezet',
+    'Alarm aangezet',
+    'Sleutels in het sleutelbakje gelegd',
+  ]},
+];
+
+// ── Manhattan Bar ── eigen checklist, vrij aan te passen
+const BAR_SECTIONS = [
+  { id:'bar-opstelling', title:'Zaal opstelling', type:'check', items:[
+    'Tafels terug juist gezet volgens het plannetje',
+    'Barstoelen terug in berging loge 1 (rechts van de gang)',
+    'Gewone stoelen terug in berging loge 1 (rechts van de gang)',
+  ]},
+  { id:'bar-vaatwasser', title:'Vaatwasser', type:'check', items:[
+    'Vaatwasser leeggemaakt',
+    'Sifon uitgewassen en op de pompbak klaargezet',
+    'Vaatwasser uitgezet',
+    'Kraanwater dichtgedraaid',
+    'Deur van de vaatwasser open gelaten',
+  ]},
+  { id:'bar-frigos', title:'Frigo\u2019s & voorraad', type:'check', items:[
+    'Frigo\u2019s aangevuld en deuren op slot',
+    'Leeggoed gesorteerd en op pallet klaargelegd aan de sas ingang',
+    'Glaswerk Bar terug proper op de rekken gelegd',
+  ]},
+  { id:'bar-afval', title:'Afval', type:'check', items:[
+    'Vuilzakken leeggemaakt en in de vuilbak buiten gegooid (mag ook na 22u) \u2014 zaklamp ligt in de berging van de Bar',
+  ]},
+  { id:'bar-berging', title:'Berging Bar gecontroleerd', type:'check', items:[
+    'Geen leeggoed meer in de berging',
+    'Geen leeggoedbakken meer in de berging',
+    'Geen priv\u00e9materiaal meer in de berging',
+    'Geen materiaal van leveranciers meer in de berging',
+  ]},
+  { id:'bar-zaal-tap', title:'Zaal & tap', type:'check', items:[
+    'Zaal geborsteld',
+    'Tapinstallatie uitgespoeld',
+  ]},
+  { id:'bar-afsluiten', title:'Afsluiten', type:'check', items:[
+    'Airco uitgezet',
+    'Brandalarm gecheckt',
+    'Sfeerlicht uitgezet indien gebruikt (buiten + binnen)',
+    'Algemene zaallichten uitgezet',
+    'Alarm aangezet',
+    'Sleutels in het sleutelbakje gelegd',
+  ]},
+];
+
+function getMaterialForRoom(roomId){
+  const room = ROOMS.find(r => r.id === roomId);
+  if (!room || !room.customMaterial) return [];
+  const mat = typeof room.customMaterial === 'function' ? room.customMaterial() : room.customMaterial;
+  return mat;
+}
+
+// Een checklistitem mag een gewone string zijn, of een object met een
+// tekst plus één of meer kleine disclaimers die eronder verschijnen.
+function itemText(it){ return (it && typeof it === 'object') ? (it.text || '') : String(it || ''); }
+function itemNotes(it){
+  if (!it || typeof it !== 'object') return [];
+  if (Array.isArray(it.notes)) return it.notes.filter(Boolean);
+  return it.note ? [it.note] : [];
+}
+
+// Maakt de vraag in het redenvakje concreet: de sluiter ziet meteen
+// over welke taak het gaat, in plaats van een algemene "waarom niet?".
+function reasonPrompt(text){
+  return 'Waarom niet? (verplicht)';
+}
+// Voorbeeldtekst in het vakje. Een item mag een eigen 'hint' meegeven.
+function reasonHint(it){
+  if (it && typeof it === 'object' && it.hint) return it.hint;
+  return 'Korte reden\u2026';
+}
+
+function getSectionsForRoom(roomId){
+  const room = ROOMS.find(r => r.id === roomId);
+  if (!room || !room.customSections) return [];
+  const custom = typeof room.customSections === 'function' ? room.customSections() : room.customSections;
+  return custom.map(s => ({...s, items:[...s.items]}));
+}
+
+function CheckIcon(){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+}
+
+let state = {
+  view: 'setup',
+  event: '',
+  datum: new Date().toISOString().slice(0,10),
+  sluiter: '',
+  rooms: [],
+  pageIndex: 0,
+  checked: {},
+  na: {},
+  itemReasons: {},
+  materialStatus: {},
+  materialReasons: {},
+  openMaterial: {},
+  sectionNotes: {},
+  openSections: {},
+  signConfirmed: false,
+  signName: '',
+  entries: [],
+  expandedEntry: null,
+  loaded: false,
+  emailEndpoint: DEFAULT_EMAIL_ENDPOINT,
+  mailState: '',      // '', 'sending', 'ok', 'fail', 'none'
+  mailError: '',
+  pendingMail: null,
+  settingsOpen: false,
+  settingsStatus: '',
+};
+
+function itemKey(roomId, sectionId, idx){ return roomId + '|' + sectionId + ':' + idx; }
+function matKey(roomId, matId){ return roomId + '|mat:' + matId; }
+function isItemResolved(key){ return !!state.checked[key] || !!state.na[key] || (state.itemReasons[key]||'').trim().length > 0; }
+function isMaterialResolved(key){
+  const st = state.materialStatus[key];
+  if (st === 'done' || st === 'na') return true;
+  if (st === 'partial') return (state.materialReasons[key]||'').trim().length > 0;
+  return false;
+}
+
+// "Afgehandeld" (hierboven) bepaalt of je verder mag: een reden opgeven
+// telt daarvoor mee. "Uitgevoerd" (hieronder) is strenger en bepaalt de
+// score: enkel wie écht afgevinkt is, telt mee. Zo kan een checklist met
+// drie aandachtspunten nooit nog 40/40 tonen.
+function isItemCounted(key){ return !state.na[key]; }
+function hasItemReason(key){ return (state.itemReasons[key]||'').trim().length > 0; }
+// Een item met een ingevulde reden is afgehandeld: het telt mee in de score.
+// Het blijft wél apart in de mail staan als aandachtspunt met die reden.
+function isItemDone(key){
+  if (state.na[key]) return false;
+  return !!state.checked[key] || hasItemReason(key);
+}
+function isMaterialCounted(key){ return state.materialStatus[key] !== 'na'; }
+function isMaterialDone(key){
+  const st = state.materialStatus[key];
+  // 'partial' = bewust blijven staan, in overleg. Dat is geen tekort.
+  return st === 'done' || st === 'partial';
+}
+
+function selectedRooms(){ return state.rooms.map(id => ROOMS.find(r => r.id === id)).filter(Boolean); }
+
+// Elke sectie van elke gekozen zaal wordt een aparte pagina.
+// De materiaalcatalogus is gedeeld en verschijnt dus maar één keer.
+function buildPages(){
+  const pages = [];
+  const rooms = selectedRooms();
+  if (!rooms.length) return pages;
+  rooms.forEach(r => {
+    const mat = getMaterialForRoom(r.id);
+    if (mat.length){
+      pages.push({ id:r.id + '|material', kind:'material', roomId:r.id, roomName:r.name, material:mat, title:'Materiaal', sub:r.name });
+    }
+    getSectionsForRoom(r.id).forEach(sec => {
+      pages.push({ id:r.id + '|' + sec.id, kind:'section', roomId:r.id, roomName:r.name, section:sec, title:sec.title, sub:r.name });
+    });
+  });
+  pages.push({ id:'sign', kind:'sign', title:'Afronden', sub:'Bevestigen en indienen' });
+  return pages;
+}
+
+function pageResolved(page){
+  if (page.kind === 'material') return page.material.every(m => isMaterialResolved(matKey(page.roomId, m.id)));
+  if (page.kind === 'section') return page.section.items.every((_, idx) => isItemResolved(itemKey(page.roomId, page.section.id, idx)));
+  return state.signConfirmed && state.signName.trim().length > 0;
+}
+function pageDoneCount(page){
+  if (page.kind === 'material') return page.material.filter(m => isMaterialDone(matKey(page.roomId, m.id))).length;
+  if (page.kind === 'section') return page.section.items.filter((_, idx) => isItemDone(itemKey(page.roomId, page.section.id, idx))).length;
+  return 0;
+}
+function pageTotalCount(page){
+  if (page.kind === 'material') return page.material.filter(m => isMaterialCounted(matKey(page.roomId, m.id))).length;
+  if (page.kind === 'section') return page.section.items.filter((_, idx) => isItemCounted(itemKey(page.roomId, page.section.id, idx))).length;
+  return 0;
+}
+function canSubmitAll(){
+  return buildPages().every(pageResolved);
+}
+
+function totalUnits(){
+  const rooms = selectedRooms();
+  if (!rooms.length) return 0;
+  let n = 0;
+  rooms.forEach(r => {
+    getMaterialForRoom(r.id).forEach(m => { if (isMaterialCounted(matKey(r.id, m.id))) n++; });
+    getSectionsForRoom(r.id).forEach(sec => {
+      sec.items.forEach((_, idx) => { if (isItemCounted(itemKey(r.id, sec.id, idx))) n++; });
+    });
+  });
+  return n;
+}
+function doneUnits(){
+  const rooms = selectedRooms();
+  if (!rooms.length) return 0;
+  let n = 0;
+  rooms.forEach(r => {
+    getMaterialForRoom(r.id).forEach(m => { if (isMaterialDone(matKey(r.id, m.id))) n++; });
+    getSectionsForRoom(r.id).forEach(sec => {
+      sec.items.forEach((_, idx) => { if (isItemDone(itemKey(r.id, sec.id, idx))) n++; });
+    });
+  });
+  return n;
+}
+// Aantal items dat de sluiter als "niet van toepassing" markeerde.
+// Die tellen niet mee in de noemer, dus we vermelden ze apart in de mail.
+function naUnits(){
+  const rooms = selectedRooms();
+  let n = 0;
+  rooms.forEach(r => {
+    getMaterialForRoom(r.id).forEach(m => { if (!isMaterialCounted(matKey(r.id, m.id))) n++; });
+    getSectionsForRoom(r.id).forEach(sec => {
+      sec.items.forEach((_, idx) => { if (!isItemCounted(itemKey(r.id, sec.id, idx))) n++; });
+    });
+  });
+  return n;
+}
+// Aantal items dat niet afgevinkt is, maar wel een reden heeft.
+// Die tellen mee als afgehandeld, en worden apart getoond en gemeld.
+function reasonUnits(){
+  const rooms = selectedRooms();
+  let n = 0;
+  rooms.forEach(r => {
+    getSectionsForRoom(r.id).forEach(sec => {
+      sec.items.forEach((_, idx) => {
+        const key = itemKey(r.id, sec.id, idx);
+        if (!state.na[key] && !state.checked[key] && hasItemReason(key)) n++;
+      });
+    });
+  });
+  return n;
+}
+
+async function loadEntries(){
+  // Buiten Claude bestaat window.storage niet. Dan is Formspree het archief.
+  if (typeof window.storage === 'undefined'){
+    state.entries = [];
+    state.storageAvailable = false;
+    state.loaded = true;
+    render();
+    return;
+  }
+  state.storageAvailable = true;
+  try{
+    const res = await window.storage.list('sluiter:', true);
+    const keys = (res && res.keys) || [];
+    const entries = [];
+    for (const k of keys){
+      try{
+        const r = await window.storage.get(k, true);
+        if (r && r.value) entries.push(JSON.parse(r.value));
+      }catch(e){}
+    }
+    entries.sort((a,b) => (b.ts||0) - (a.ts||0));
+    state.entries = entries;
+  }catch(e){
+    state.entries = [];
+  }
+  state.loaded = true;
+  render();
+}
+
+async function loadEmailSettings(){
+  if (typeof window.storage === 'undefined') return;
+  try{
+    const r = await window.storage.get('settings:email-endpoint', true);
+    if (r && r.value) state.emailEndpoint = r.value;
+  }catch(e){}
+}
+
+async function saveEmailSettings(url){
+  if (typeof window.storage === 'undefined'){
+    state.settingsStatus = 'Opslaan werkt alleen wanneer je dit bestand opent via Claude (de gedeelde preview), niet als je het lokaal gedownload hebt geopend.';
+    render();
+    return;
+  }
+  state.emailEndpoint = url.trim() || DEFAULT_EMAIL_ENDPOINT;
+  try{
+    const result = await window.storage.set('settings:email-endpoint', state.emailEndpoint, true);
+    state.settingsStatus = result ? 'Opgeslagen ✓' : 'Opslaan mislukt (geen bevestiging terugontvangen), probeer opnieuw.';
+  }catch(e){
+    state.settingsStatus = 'Opslaan mislukt: ' + (e && e.message ? e.message : 'onbekende fout') + '.';
+  }
+  render();
+}
+
+// Bouwt het mailbericht op. Apart gehouden zodat "opnieuw versturen"
+// exact dezelfde inhoud kan hergebruiken.
+function buildMailBody(entry){
+  const lines = [];
+  lines.push('Zaal: ' + entry.room);
+  lines.push('Event: ' + (entry.event || '-'));
+  lines.push('Datum: ' + entry.datum);
+  lines.push('Sluiter: ' + entry.sluiter);
+  const extra = [];
+  if (entry.reasonCount) extra.push(entry.reasonCount + ' met reden');
+  if (entry.naCount) extra.push(entry.naCount + ' x niet van toepassing, niet meegeteld');
+  lines.push('Voltooid: ' + entry.doneCount + '/' + entry.total
+    + (extra.length ? ' (' + extra.join(', ') + ')' : ''));
+  if (entry.exceptions && entry.exceptions.length){
+    lines.push('');
+    lines.push('AANDACHTSPUNTEN (niet uitgevoerd, met reden):');
+    entry.exceptions.forEach(x => lines.push('- ' + x.label + ': ' + x.reason));
+  }
+  if (entry.planned && entry.planned.length){
+    lines.push('');
+    lines.push('Bewust blijven staan (afgesproken, geen probleem):');
+    entry.planned.forEach(x => lines.push('- ' + x.label + ': ' + x.reason));
+  }
+  if (entry.naList && entry.naList.length){
+    lines.push('');
+    lines.push('Niet van toepassing dit event:');
+    entry.naList.forEach(x => lines.push('- ' + x));
+  }
+  const notesEntries = Object.entries(entry.sectionNotes || {}).filter(([k,v]) => v && v.trim());
+  if (notesEntries.length){
+    lines.push('');
+    lines.push('Opmerkingen:');
+    notesEntries.forEach(([k,v]) => lines.push('- ' + v));
+  }
+  const problemen = (entry.exceptions || []).length;
+  const gepland = (entry.planned || []).length;
+  // Onderwerpregel: alleen echte aandachtspunten verdienen aandacht.
+  // Bewust blijven staan wordt vermeld, maar niet als probleem gemarkeerd.
+  let subjectTail;
+  if (problemen){
+    subjectTail = ' – ' + problemen + ' aandachtspunt' + (problemen > 1 ? 'en' : '');
+  } else if (gepland){
+    subjectTail = ' – OK (' + gepland + ' bewust blijven staan)';
+  } else {
+    subjectTail = ' – OK';
+  }
+  let statusText;
+  if (problemen){
+    statusText = problemen + ' aandachtspunt(en)' + (gepland ? ' + ' + gepland + ' bewust blijven staan' : '');
+  } else if (gepland){
+    statusText = 'In orde, ' + gepland + ' bewust blijven staan';
+  } else {
+    statusText = 'Volledig in orde';
+  }
+  // Let op: géén FormData. In de Claude-sandbox gaat fetch via postMessage
+  // en een FormData-object kan niet gekloond worden. JSON is een string en werkt wel.
+  return {
+    _subject: 'Sluiter checklist – ' + entry.room + ' – ' + entry.datum + subjectTail,
+    zaal: entry.room,
+    event: entry.event || '',
+    datum: entry.datum,
+    sluiter: entry.sluiter,
+    status: statusText,
+    message: lines.join('\n')
+  };
+}
+
+// Verstuurt de mail en zegt eerlijk of het gelukt is.
+// Zet state.mailState op 'ok' / 'fail' / 'none' zodat de sluiter het ziet.
+async function sendEmailNotification(entry){
+  if (!state.emailEndpoint){
+    state.mailState = 'none';
+    state.mailError = '';
+    state.pendingMail = entry;
+    return false;
+  }
+  state.mailState = 'sending';
+  state.mailError = '';
+  state.pendingMail = entry;
+  try{
+    const res = await fetch(state.emailEndpoint, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify(buildMailBody(entry))
+    });
+    if (res && res.ok){
+      state.mailState = 'ok';
+      state.pendingMail = null;
+      return true;
+    }
+    state.mailState = 'fail';
+    // Formspree stuurt bij een fout zelf uitleg mee — die is nuttiger dan enkel de status.
+    let detail = '';
+    try{
+      const data = await res.json();
+      if (data && data.errors && data.errors.length){
+        detail = ' ' + data.errors.map(e => e.message || '').filter(Boolean).join('; ');
+      } else if (data && data.error){
+        detail = ' ' + data.error;
+      }
+    }catch(e){}
+    state.mailError = 'Server antwoordde met status ' + (res ? res.status : '?') + '.' + detail;
+    return false;
+  }catch(e){
+    state.mailState = 'fail';
+    state.mailError = (e && e.message) ? e.message : 'Geen verbinding.';
+    return false;
+  }
+}
+
+async function submitChecklist(){
+  const rooms = selectedRooms();
+  const multi = rooms.length > 1;
+  const exceptions = [];
+  const planned = [];
+  const naList = [];
+  rooms.forEach(r => {
+    getSectionsForRoom(r.id).forEach(sec => {
+      sec.items.forEach((it, idx) => {
+        const text = itemText(it);
+        const key = itemKey(r.id, sec.id, idx);
+        const label = multi ? r.name + ' — ' + text : text;
+        if (state.na[key]){
+          naList.push(label);
+        } else if (!state.checked[key]){
+          const reason = (state.itemReasons[key]||'').trim();
+          exceptions.push({ label, reason: reason || '(geen reden opgegeven)' });
+        }
+      });
+    });
+  });
+  rooms.forEach(r => {
+    getMaterialForRoom(r.id).forEach(m => {
+      const key = matKey(r.id, m.id);
+      const st = state.materialStatus[key];
+      const prefix = multi ? r.name + ' \u2014 ' : '';
+      if (st === 'na'){
+        naList.push(prefix + m.name + ' (niet gebruikt)');
+      } else if (st === 'partial'){
+        // Bewuste keuze, geen probleem: apart houden van de echte aandachtspunten.
+        const reason = (state.materialReasons[key]||'').trim();
+        planned.push({ label: prefix + m.name, reason: reason || '(geen toelichting)' });
+      } else if (st !== 'done'){
+        const reason = (state.materialReasons[key]||'').trim();
+        exceptions.push({ label: prefix + m.name + ' (geen status gekozen)', reason: reason || '(geen reden opgegeven)' });
+      }
+    });
+  });
+  const entry = {
+    id: 'entry_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+    ts: Date.now(),
+    room: rooms.map(r => r.name).join(' + '),
+    roomIds: rooms.map(r => r.id),
+    event: state.event,
+    datum: state.datum,
+    sluiter: state.signName || state.sluiter,
+    total: totalUnits(),
+    doneCount: doneUnits(),
+    naCount: naUnits(),
+    reasonCount: reasonUnits(),
+    exceptions,
+    planned,
+    naList,
+    sectionNotes: {...state.sectionNotes},
+  };
+  try{
+    await window.storage.set('sluiter:' + entry.id, JSON.stringify(entry), true);
+  }catch(e){}
+  state.lastEntry = entry;
+  state.view = 'stamp';
+  state.mailState = state.emailEndpoint ? 'sending' : 'none';
+  render();
+  await sendEmailNotification(entry);
+  render();
+}
+
+async function retryMail(){
+  const entry = state.pendingMail || state.lastEntry;
+  if (!entry) return;
+  state.mailState = 'sending';
+  render();
+  await sendEmailNotification(entry);
+  render();
+}
+
+async function deleteEntry(id){
+  try{ await window.storage.delete('sluiter:' + id, true); }catch(e){}
+  await loadEntries();
+}
+
+function resetForm(){
+  state.view = 'setup';
+  state.event = '';
+  state.sluiter = '';
+  state.rooms = [];
+  state.pageIndex = 0;
+  state.checked = {};
+  state.na = {};
+  state.itemReasons = {};
+  state.materialStatus = {};
+  state.materialReasons = {};
+  state.openMaterial = {};
+  state.sectionNotes = {};
+  state.openSections = {};
+  state.signConfirmed = false;
+  state.signName = '';
+  state.mailState = '';
+  state.mailError = '';
+  state.pendingMail = null;
+  state.datum = new Date().toISOString().slice(0,10);
+  render();
+}
+
+function render(){
+  const app = document.getElementById('app');
+  let html = '';
+
+  html += `<div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">DH</div>
+      <div class="brand-text">
+        <div class="name">De Hoorn</div>
+        <div class="sub">Sluiter checklist</div>
+      </div>
+    </div>
+    <div class="nav-toggle">
+      <button class="nav-btn ${state.view!=='overview'?'active':''}" onclick="window.__nav('form')">Invullen</button>
+      <button class="nav-btn ${state.view==='overview'?'active':''}" onclick="window.__nav('overview')">Overzicht</button>
+    </div>
+  </div>`;
+
+  if (state.view === 'overview'){ html += renderOverview(); }
+  else if (state.view === 'setup'){ html += renderSetup(); }
+  else if (state.view === 'checklist'){ html += renderChecklist(); }
+  else if (state.view === 'stamp'){ html += renderStamp(); }
+
+  app.innerHTML = html;
+  attachHandlers();
+}
+
+function renderSetup(){
+  let rooms = '';
+  ROOMS.forEach(r => {
+    const sel = state.rooms.includes(r.id);
+    rooms += `<div class="room-chip ${sel?'selected':''}" data-room="${r.id}">${sel?'\u2713 ':''}${r.name}</div>`;
+  });
+  const n = state.rooms.length;
+  return `
+    <span class="eyebrow">Stap 1 van 2</span>
+    <h1 class="screen-title">Nieuwe checklist</h1>
+    <p class="screen-sub">Vul de gegevens in en kies de zaal die je afsluit.</p>
+
+    <div class="field">
+      <label>Event</label>
+      <input type="text" id="f-event" placeholder="bv. Bruiloft Janssens" value="${escapeAttr(state.event)}">
+    </div>
+    <div class="field">
+      <label>Datum</label>
+      <input type="date" id="f-datum" value="${state.datum}">
+    </div>
+    <div class="field">
+      <label>Naam sluiter</label>
+      <select id="f-sluiter">
+        <option value="" ${!state.sluiter ? 'selected' : ''} disabled>Kies je naam...</option>
+        ${SLUITERS.map(x => `<option value="${escapeAttr(x)}" ${state.sluiter===x?'selected':''}>${escapeHtml(x)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field">
+      <label>Zaal ${n ? '\u2014 ' + escapeHtml(selectedRooms().map(r => r.name).join('')) : '(kies er \u00e9\u00e9n)'}</label>
+      <div class="room-grid">${rooms}</div>
+    </div>
+    <button class="primary-btn" id="f-start" ${(n && state.sluiter) ? '' : 'disabled'}>Start checklist</button>
+  `;
+}
+
+function renderMaterialPage(page){
+  let rowsHtml = '';
+  page.material.forEach(m => {
+    const key = matKey(page.roomId, m.id);
+    const st = state.materialStatus[key] || '';
+    const isOpen = !!state.openMaterial[key];
+    const reason = state.materialReasons[key] || '';
+    const badge = st === 'done' ? 'Opgeruimd' : st === 'partial' ? 'Deels' : st === 'na' ? 'n.v.t.' : 'Kies';
+    const badgeCls = st === 'done' ? 'full' : st === 'partial' ? 'partial' : st === 'na' ? 'na' : '';
+    rowsHtml += `
+      <div class="mat-row">
+        <div class="mat-head" data-mat-toggle="${key}">
+          <div class="mat-name">${escapeHtml(m.name)}</div>
+          <div class="mat-badge ${badgeCls}">${badge}</div>
+        </div>
+        ${isOpen && (m.instruction || m.storage) ? `<div class="mat-instruction">${m.instruction ? escapeHtml(m.instruction) : ''}${m.storage ? `<div class="mat-storage" ${m.instruction ? '' : 'style="margin-top:0; padding-top:0; border-top:none;"'}><span>Opbergen</span> ${escapeHtml(m.storage)}</div>` : ''}</div>` : ''}
+        <div class="mat-choices">
+          ${MAT_CHOICES.map(c => `<div class="mat-choice ${st===c.id ? 'sel ' + c.id : ''}" data-mat-set="${key}" data-mat-val="${c.id}">${c.label}</div>`).join('')}
+        </div>
+        ${st === 'partial' ? `
+        <div class="mat-reason ${reason.trim() ? 'active' : ''}">
+          <label>Wat blijft staan en waarom? (verplicht om te kunnen indienen)</label>
+          <textarea data-mat-reason="${key}" placeholder="bv. 20 stoelen blijven staan voor het event van morgen">${escapeHtml(reason)}</textarea>
+        </div>` : ''}
+      </div>`;
+  });
+  return `<div class="section-card">
+    <div class="section-body" style="padding-top:4px;">
+      <p style="font-size:11.5px; color:var(--text-faint); line-height:1.5; margin:6px 0 12px;">Tik op de naam voor de uitleg waar het materiaal hoort.</p>
+      ${rowsHtml}
+    </div>
+  </div>`;
+}
+
+function renderSectionPage(page){
+  const sec = page.section;
+  let itemsHtml = '';
+  sec.items.forEach((it, idx) => {
+    const text = itemText(it);
+    const notes = itemNotes(it);
+    const key = itemKey(page.roomId, sec.id, idx);
+    const isChecked = !!state.checked[key];
+    const na = !!state.na[key];
+    const reason = state.itemReasons[key] || '';
+    itemsHtml += `
+      <div class="item-row">
+        <div class="item-check ${isChecked?'checked':''}" data-toggle="${key}">${CheckIcon()}</div>
+        <div class="item-col">
+          <div class="item-text ${isChecked?'checked':''}" data-toggle="${key}">${escapeHtml(text)}</div>
+          ${notes.map(n => `<div class="item-note">${escapeHtml(n)}</div>`).join('')}
+        </div>
+      </div>
+      <div class="sub-row">
+        <div class="na-check ${na?'checked':''}" data-na="${key}">${CheckIcon()}</div>
+        <div class="na-label ${na?'active':''}" data-na="${key}">Niet van toepassing</div>
+      </div>`;
+    if (!isChecked && !na){
+      const filled = reason.trim().length > 0;
+      itemsHtml += `
+      <div class="reason-field ${filled ? 'filled' : ''}" data-reason-wrap="${key}">
+        <span class="reason-label">${escapeHtml(reasonPrompt(text))}</span>
+        <textarea data-item-reason="${key}" placeholder="${escapeAttr(reasonHint(it))}">${escapeHtml(reason)}</textarea>
+      </div>`;
+    }
+  });
+  return `
+    <div class="section-card">
+      <div class="section-body" style="padding-top:4px;">
+        ${itemsHtml}
+        <div class="note-field">
+          <label>Opmerkingen (optioneel)</label>
+          <textarea data-note="${page.id}" placeholder="Bijzonderheden voor deze sectie...">${escapeHtml(state.sectionNotes[page.id]||'')}</textarea>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderSignPage(){
+  const pages = buildPages();
+  const open = pages.filter(pg => pg.kind !== 'sign' && !pageResolved(pg));
+  let warn = '';
+  if (open.length){
+    warn = `<div class="warn-card">
+      <div class="warn-title">Nog niet klaar</div>
+      ${open.map(pg => `<div class="warn-item" data-goto="${escapeAttr(pg.id)}">\u2192 ${escapeHtml(pg.title)}${pg.sub ? ' \u00b7 ' + escapeHtml(pg.sub) : ''} (${pageDoneCount(pg)}/${pageTotalCount(pg)})</div>`).join('')}
+    </div>`;
+  }
+  return `
+    ${warn}
+    <div class="sign-card">
+      <div class="field" style="margin-bottom:12px;">
+        <label>Handtekening (naam ter bevestiging)</label>
+        <input type="text" id="f-signname" placeholder="Typ je naam" value="${escapeAttr(state.signName)}">
+      </div>
+      <div class="sign-row" id="sign-confirm">
+        <div class="sign-check ${state.signConfirmed?'checked':''}">${CheckIcon()}</div>
+        <div class="sign-text">Ik bevestig dat ik alles hierboven gecontroleerd heb</div>
+      </div>
+      <div class="mail-hint ${state.emailEndpoint ? '' : 'off'}">
+        ${state.emailEndpoint
+          ? '\u2709 Bij indienen gaat er automatisch een mail naar de verantwoordelijke.'
+          : '\u26a0 Er is geen mailadres ingesteld \u2014 deze checklist wordt wel opgeslagen, maar er vertrekt g\u00e9\u00e9n mail.'}
+      </div>
+    </div>`;
+}
+
+function renderChecklist(){
+  const pages = buildPages();
+  if (!pages.length){ state.view = 'setup'; return renderSetup(); }
+  if (state.pageIndex > pages.length - 1) state.pageIndex = pages.length - 1;
+  if (state.pageIndex < 0) state.pageIndex = 0;
+  const idx = state.pageIndex;
+  const page = pages[idx];
+
+  const total = totalUnits();
+  const done = doneUnits();
+  const pct = total ? Math.round((done/total)*100) : 0;
+
+  const strip = pages.map((pg,i) => {
+    const cls = i === idx ? 'current' : (pageResolved(pg) ? 'done' : '');
+    return `<div class="step-chip ${cls}" data-page="${i}">${escapeHtml(pg.title)}</div>`;
+  }).join('');
+
+  let body = '';
+  if (page.kind === 'material') body = renderMaterialPage(page);
+  else if (page.kind === 'section') body = renderSectionPage(page);
+  else body = renderSignPage();
+
+  const isLast = page.kind === 'sign';
+  const pageCount = page.kind === 'sign' ? '' : `<span class="page-count">${pageDoneCount(page)}/${pageTotalCount(page)}</span>`;
+
+  return `
+    <div class="progress-wrap">
+      <div class="progress-label"><span>${escapeHtml(state.event || 'Checklist')} \u00b7 ${escapeHtml(state.sluiter || '\u2014')}</span><span>${done}/${total}${reasonUnits() ? ' \u00b7 ' + reasonUnits() + ' met reden' : ''}</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+
+    <div class="step-strip">${strip}</div>
+
+    <div class="page-head">
+      <span class="eyebrow">Pagina ${idx+1} van ${pages.length}${page.sub ? ' \u00b7 ' + escapeHtml(page.sub) : ''}</span>
+      <h1 class="screen-title">${escapeHtml(page.title)} ${pageCount}</h1>
+    </div>
+
+    ${body}
+
+    <div class="page-nav">
+      <button class="nav-arrow" id="f-prev" ${idx === 0 ? 'disabled' : ''}>\u2190 Vorige</button>
+      ${isLast
+        ? `<button class="primary-btn" id="f-submit" style="flex:2;" ${canSubmitAll() ? '' : 'disabled'}>Checklist voltooien</button>`
+        : `<button class="primary-btn" id="f-next" style="flex:2;">Volgende \u2192</button>`}
+    </div>
+    <button class="ghost-btn" id="f-back">\u2190 Terug naar zaalkeuze</button>
+  `;
+}
+
+// Toont onderaan het stempel of de mail echt vertrokken is.
+function renderMailStatus(){
+  if (state.mailState === 'sending'){
+    return `<div class="mail-status sending">\u2709 Mail wordt verstuurd...</div>`;
+  }
+  if (state.mailState === 'ok'){
+    return `<div class="mail-status ok">\u2709 Mail verstuurd \u2713</div>`;
+  }
+  if (state.mailState === 'none'){
+    return `<div class="mail-status warn">
+      \u26a0 Geen mailadres ingesteld \u2014 er is g\u00e9\u00e9n mail vertrokken.<br>
+      De checklist zelf is wel bewaard. Meld dit aan Robbe.
+    </div>`;
+  }
+  if (state.mailState === 'fail'){
+    return `<div class="mail-status fail">
+      \u26a0 Mail is NIET verstuurd.${state.mailError ? '<br><span class="mail-detail">' + escapeHtml(state.mailError) + '</span>' : ''}<br>
+      Check of de tablet internet heeft en probeer opnieuw.
+      <button class="ghost-btn" id="f-retry-mail" style="margin-top:10px;">Opnieuw versturen</button>
+    </div>`;
+  }
+  return '';
+}
+
+function renderStamp(){
+  const e = state.lastEntry;
+  if (!e) return renderSetup();
+  return `
+    <div class="stamp-wrap">
+      <div class="stamp">
+        <svg class="stamp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <div class="stamp-label">Afgesloten</div>
+        <div class="stamp-room">${escapeHtml(e.room)}</div>
+      </div>
+      <div class="stamp-meta">
+        <div><b>${escapeHtml(e.event || 'Event')}</b></div>
+        <div>${escapeHtml(e.datum)} · ${escapeHtml(e.sluiter)}</div>
+        <div>${e.doneCount}/${e.total} items afgehandeld${e.reasonCount ? ', waarvan ' + e.reasonCount + ' met reden' : ''}</div>
+        ${(e.exceptions && e.exceptions.length) ? `<div class="stamp-flag warn">\u26a0 ${e.exceptions.length} aandachtspunt${e.exceptions.length>1?'en':''} \u2014 met reden doorgegeven</div>` : ''}
+        ${(e.planned && e.planned.length) ? `<div class="stamp-flag ok">${e.planned.length} bewust blijven staan \u2014 met toelichting doorgegeven</div>` : ''}
+      </div>
+      ${renderMailStatus()}
+      <button class="primary-btn" id="f-newcheck" style="margin-top:20px;">Nieuwe checklist starten</button>
+    </div>
+  `;
+}
+
+function renderOverview(){
+  if (!state.loaded){ return `<div class="loading">Checklists laden...</div>`; }
+  let html = `<span class="eyebrow">Overzicht</span><h1 class="screen-title" style="margin-bottom:18px;">Ingevulde checklists</h1>`;
+  if (state.storageAvailable === false){
+    html += `<div class="archive-note">
+      <div class="archive-title">Archief staat bij Formspree</div>
+      <p>Deze app draait als gewone webpagina, dus inzendingen worden hier niet lokaal bewaard.
+      Elke ingediende checklist komt binnen als mail én wordt bewaard in je Formspree-dashboard,
+      waar je ze kan doorzoeken en exporteren.</p>
+      <a class="archive-link" href="https://formspree.io/forms" target="_blank" rel="noopener">Open Formspree-dashboard \u2192</a>
+    </div>`;
+  } else if (!state.entries.length){
+    html += `<div class="empty-state">Zodra sluiters een checklist invullen, verschijnt die hier.</div>`;
+  } else {
+    state.entries.forEach(e => {
+      const hasExceptions = e.exceptions && e.exceptions.length > 0;
+      const hasPlanned = e.planned && e.planned.length > 0;
+      const expanded = state.expandedEntry === e.id;
+      const dateStr = new Date(e.ts).toLocaleString('nl-BE', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
+      let detail = '';
+      if (expanded){
+        let excHtml = hasExceptions
+          ? e.exceptions.map(x => `<div class="exception-item">⚠ ${escapeHtml(x.label)}<br><span class="reason">${escapeHtml(x.reason)}</span></div>`).join('')
+          : `<div style="color:var(--success)">Alles afgevinkt, geen aandachtspunten</div>`;
+        let planHtml = '';
+        if (hasPlanned){
+          planHtml = `<div class="planned-block">
+            <div class="planned-title">Bewust blijven staan</div>
+            ${e.planned.map(x => `<div class="planned-item">${escapeHtml(x.label)}<br><span class="reason">${escapeHtml(x.reason)}</span></div>`).join('')}
+          </div>`;
+        }
+        let naHtml = '';
+        if (e.naList && e.naList.length){
+          naHtml = `<div class="note" style="margin-top:8px;">Niet van toepassing: ${e.naList.map(escapeHtml).join(', ')}</div>`;
+        }
+        let notesHtml = '';
+        Object.entries(e.sectionNotes || {}).forEach(([k,v]) => {
+          if (v && v.trim()) notesHtml += `<div class="note">"${escapeHtml(v)}"</div>`;
+        });
+        detail = `<div class="entry-detail">${excHtml}${planHtml}${naHtml}${notesHtml}<button class="entry-delete" data-delete="${e.id}">Verwijderen</button></div>`;
+      }
+      html += `
+        <div class="entry-card">
+          <div class="entry-top">
+            <div>
+              <div class="entry-room">${escapeHtml(e.room)}</div>
+              <div class="entry-meta">${escapeHtml(e.event || '—')}<br>${escapeHtml(e.datum)} · ${escapeHtml(e.sluiter)}<br>ingediend ${dateStr}</div>
+            </div>
+            <div class="entry-badge ${hasExceptions?'exception':(hasPlanned?'planned':'complete')}">${hasExceptions ? e.exceptions.length + ' aandachtspunt' + (e.exceptions.length>1?'en':'') : (hasPlanned ? 'Deels blijven staan' : 'Volledig')}</div>
+          </div>
+          <div class="entry-toggle" data-expand="${e.id}">${expanded ? 'Verberg details' : 'Toon details'}</div>
+          ${detail}
+        </div>`;
+    });
+  }
+
+  html += `
+    <div class="settings-card">
+      <div class="section-head" data-settings-toggle="1">
+        <div class="section-head-title">E-mail instellingen</div>
+        <div class="chevron ${state.settingsOpen?'open':''}">▾</div>
+      </div>
+      ${state.settingsOpen ? `
+      <div class="section-body">
+        <p style="font-size:11.5px; color:var(--text-dim); line-height:1.6; margin:0 0 10px;">
+          Plak hier je Formspree-formulier-URL (formspree.io, gratis, koppel je werkmail eraan) om automatisch een mail te krijgen bij elke ingevulde checklist.
+        </p>
+        <input type="text" id="f-email-endpoint" placeholder="https://formspree.io/f/xxxxxxx" value="${escapeAttr(state.emailEndpoint)}">
+        <button class="ghost-btn" id="f-save-endpoint" style="margin-top:8px;">Opslaan</button>
+        ${state.settingsStatus ? `<div class="settings-status">${escapeHtml(state.settingsStatus)}</div>` : ''}
+      </div>` : ''}
+    </div>
+  `;
+
+  return html;
+}
+
+// Werkt voortgangsbalk en submitknop live bij zonder opnieuw te renderen,
+// zodat de cursor niet uit het tekstvak springt tijdens het typen.
+function refreshLiveState(){
+  if (state.view !== 'checklist') return;
+  const total = totalUnits();
+  const done = doneUnits();
+  const pct = total ? Math.round((done/total)*100) : 0;
+  const fill = document.querySelector('.progress-fill');
+  if (fill) fill.style.width = pct + '%';
+  const label = document.querySelector('.progress-label span:last-child');
+  const rc = reasonUnits();
+  if (label) label.textContent = done + '/' + total + (rc ? ' \u00b7 ' + rc + ' met reden' : '');
+  const btn = document.getElementById('f-submit');
+  if (btn) btn.disabled = !canSubmitAll();
+}
+
+function escapeHtml(str){
+  return String(str||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function escapeAttr(str){ return escapeHtml(str); }
+
+function attachHandlers(){
+  document.querySelectorAll('[data-room]').forEach(el => el.addEventListener('click', () => {
+    const id = el.getAttribute('data-room');
+    // Eén zaal per checklist: opnieuw tikken maakt de keuze weer leeg.
+    state.rooms = state.rooms[0] === id ? [] : [id];
+    state.pageIndex = 0;
+    render();
+  }));
+
+  document.querySelectorAll('[data-page]').forEach(el => el.addEventListener('click', () => {
+    state.pageIndex = parseInt(el.getAttribute('data-page'), 10) || 0;
+    window.scrollTo(0, 0);
+    render();
+  }));
+
+  document.querySelectorAll('[data-goto]').forEach(el => el.addEventListener('click', () => {
+    const target = el.getAttribute('data-goto');
+    const i = buildPages().findIndex(pg => pg.id === target);
+    if (i >= 0){ state.pageIndex = i; window.scrollTo(0, 0); render(); }
+  }));
+
+  const prevBtn = document.getElementById('f-prev');
+  if (prevBtn) prevBtn.addEventListener('click', () => { state.pageIndex--; window.scrollTo(0, 0); render(); });
+  const nextBtn = document.getElementById('f-next');
+  if (nextBtn) nextBtn.addEventListener('click', () => { state.pageIndex++; window.scrollTo(0, 0); render(); });
+
+  const evInput = document.getElementById('f-event');
+  if (evInput) evInput.addEventListener('input', e => { state.event = e.target.value; });
+  const datInput = document.getElementById('f-datum');
+  if (datInput) datInput.addEventListener('input', e => { state.datum = e.target.value; });
+  const sluInput = document.getElementById('f-sluiter');
+  if (sluInput) sluInput.addEventListener('change', e => { state.sluiter = e.target.value; render(); });
+
+  const startBtn = document.getElementById('f-start');
+  if (startBtn) startBtn.addEventListener('click', () => {
+    if (!state.rooms.length || !state.sluiter) return;
+    if (!state.signName) state.signName = state.sluiter;
+    state.pageIndex = 0;
+    state.view = 'checklist';
+    render();
+  });
+
+  document.querySelectorAll('[data-toggle]').forEach(el => {
+    el.addEventListener('click', () => {
+      const key = el.getAttribute('data-toggle');
+      state.checked[key] = !state.checked[key];
+      if (state.checked[key]) state.na[key] = false;
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-na]').forEach(el => {
+    el.addEventListener('click', () => {
+      const key = el.getAttribute('data-na');
+      state.na[key] = !state.na[key];
+      if (state.na[key]) state.checked[key] = false;
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-section]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-section');
+      state.openSections[id] = state.openSections[id] === false ? true : false;
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-mat-toggle]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-mat-toggle');
+      state.openMaterial[id] = !state.openMaterial[id];
+      render();
+    });
+  });
+  document.querySelectorAll('[data-mat-set]').forEach(el => {
+    el.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const id = el.getAttribute('data-mat-set');
+      const val = el.getAttribute('data-mat-val');
+      state.materialStatus[id] = state.materialStatus[id] === val ? '' : val;
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-note]').forEach(el => {
+    el.addEventListener('input', e => {
+      const id = el.getAttribute('data-note');
+      state.sectionNotes[id] = e.target.value;
+    });
+  });
+
+  document.querySelectorAll('[data-item-reason]').forEach(el => {
+    el.addEventListener('input', e => {
+      const key = el.getAttribute('data-item-reason');
+      state.itemReasons[key] = e.target.value;
+      const wrap = el.closest('.reason-field');
+      if (wrap) wrap.classList.toggle('filled', e.target.value.trim().length > 0);
+      refreshLiveState();
+    });
+  });
+
+  document.querySelectorAll('[data-mat-reason]').forEach(el => {
+    el.addEventListener('input', e => {
+      const id = el.getAttribute('data-mat-reason');
+      state.materialReasons[id] = e.target.value;
+      refreshLiveState();
+    });
+  });
+
+  document.querySelectorAll('[data-settings-toggle]').forEach(el => {
+    el.addEventListener('click', () => {
+      state.settingsOpen = !state.settingsOpen;
+      state.settingsStatus = '';
+      render();
+    });
+  });
+  const saveEndpointBtn = document.getElementById('f-save-endpoint');
+  if (saveEndpointBtn) saveEndpointBtn.addEventListener('click', () => {
+    const val = document.getElementById('f-email-endpoint').value;
+    saveEmailSettings(val);
+  });
+
+  const signName = document.getElementById('f-signname');
+  if (signName) signName.addEventListener('input', e => { state.signName = e.target.value; refreshLiveState(); });
+
+  const signConfirm = document.getElementById('sign-confirm');
+  if (signConfirm) signConfirm.addEventListener('click', () => {
+    state.signConfirmed = !state.signConfirmed;
+    render();
+  });
+
+  const submitBtn = document.getElementById('f-submit');
+  if (submitBtn) submitBtn.addEventListener('click', () => {
+    if (state.submitting) return;
+    state.submitting = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Bezig met verzenden...';
+    submitChecklist().catch(() => {}).then(() => { state.submitting = false; });
+  });
+
+  const backBtn = document.getElementById('f-back');
+  if (backBtn) backBtn.addEventListener('click', () => { state.view = 'setup'; render(); });
+
+  const retryMailBtn = document.getElementById('f-retry-mail');
+  if (retryMailBtn) retryMailBtn.addEventListener('click', () => { retryMail(); });
+
+  const newCheckBtn = document.getElementById('f-newcheck');
+  if (newCheckBtn) newCheckBtn.addEventListener('click', resetForm);
+
+  document.querySelectorAll('[data-expand]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-expand');
+      state.expandedEntry = state.expandedEntry === id ? null : id;
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-delete]').forEach(el => {
+    el.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const id = el.getAttribute('data-delete');
+      deleteEntry(id);
+    });
+  });
+}
+
+window.__nav = function(target){
+  if (target === 'overview'){
+    state.view = 'overview';
+    state.expandedEntry = null;
+    render();
+    loadEntries();
+  } else {
+    if (state.view === 'overview') state.view = 'setup';
+    render();
+  }
+};
+
+(async function init(){
+  await loadEmailSettings();
+  render();
+})();
+</script>
+</body>
+</html>
