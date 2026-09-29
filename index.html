@@ -351,20 +351,41 @@ const SHARED_SECTIONS = [
   ]},
 ];
 
-// Zalen met enkel de gedeelde secties.
-const KING_SECTIONS = SHARED_SECTIONS;
-const QUEEN_SECTIONS = SHARED_SECTIONS;
-const MZ_SECTIONS = SHARED_SECTIONS;
-const MULTIFUNK_SECTIONS = SHARED_SECTIONS;
-
-// ── Brouwzaal ── gedeelde secties + een extra keukentaak en de tap.
 // sharedSection() pakt een gedeelde sectie en laat je er items bij zetten
-// zonder de andere zalen te beïnvloeden.
+// zonder de andere zalen te beïnvloeden. De extra items komen onderaan.
+// sharedSectionTop() doet hetzelfde, maar zet ze bovenaan de lijst.
 function sharedSection(id, extraItems){
   const base = SHARED_SECTIONS.find(s => s.id === id);
   return { ...base, items:[...base.items, ...(extraItems || [])] };
 }
+function sharedSectionTop(id, extraItems){
+  const base = SHARED_SECTIONS.find(s => s.id === id);
+  return { ...base, items:[...(extraItems || []), ...base.items] };
+}
 
+// Zalen met enkel de gedeelde secties.
+const KING_SECTIONS = SHARED_SECTIONS;
+const QUEEN_SECTIONS = SHARED_SECTIONS;
+
+// ── Machinezaal, Hangar & Atrium ── gedeelde secties + tankbier bij het afsluiten.
+const MZ_SECTIONS = [
+  sharedSection('algemeen-afval'),
+  sharedSection('controle-afsluit', [
+    { text:'Tankbier op water zetten',
+      note:'Tenzij er de dag erna iets is, dan mag het blijven opstaan.' },
+  ]),
+];
+
+// ── Multifunk ── gedeelde secties + de meeting rooms, bovenaan bij het afsluiten.
+const MULTIFUNK_SECTIONS = [
+  sharedSection('algemeen-afval'),
+  sharedSectionTop('controle-afsluit', [
+    { text:'Alle meeting rooms controleren',
+      note:'Geen vuile glazen, tassen etc. achterlaten + tv-schermen uitschakelen.' },
+  ]),
+];
+
+// ── Brouwzaal ── gedeelde secties + een extra keukentaak en de tap.
 const BROUWZAAL_SECTIONS = [
   sharedSection('algemeen-afval', [
     { text:'Keuken +2 opruimen',
@@ -377,6 +398,7 @@ const BROUWZAAL_SECTIONS = [
       notes:['Vat nodig dag erna? Laat staan naast de tap.',
              'Niet direct nodig? Vat in koeling van King plaatsen.'] },
     'Acide dichtdraaien aan de fles!',
+    'Tap uittrekken',
   ]},
 ];
 // ── Manhattan Studio 1 ── eigen checklist, vrij aan te passen
