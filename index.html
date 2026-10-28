@@ -367,12 +367,14 @@ function sharedSectionTop(id, extraItems){
 const KING_SECTIONS = SHARED_SECTIONS;
 const QUEEN_SECTIONS = SHARED_SECTIONS;
 
-// ── Machinezaal, Hangar & Atrium ── gedeelde secties + tankbier bij het afsluiten.
+// ── Machinezaal, Hangar & Atrium ── gedeelde secties + tankbier en DJ-booth bij het afsluiten.
 const MZ_SECTIONS = [
   sharedSection('algemeen-afval'),
   sharedSection('controle-afsluit', [
     { text:'Tankbier op water zetten',
       note:'Tenzij er de dag erna iets is, dan mag het blijven opstaan.' },
+    { text:'DJ-booth gecontroleerd',
+      note:'Zorg dat deze terug aangesloten is en dat je hem proper achterlaat.' },
   ]),
 ];
 
